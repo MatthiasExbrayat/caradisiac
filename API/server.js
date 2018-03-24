@@ -159,6 +159,37 @@ app.get('/suv/maxVolume/:maxVolume', (req, res) => {
       }
   });
 });
+//This route return the 50 first suv order by volume bigger to lower with the volume
+//in the range given by the user in parameter (ex: 500&600)
+app.get('/suv/rangeVolume/:minVolume&:maxVolume', (req, res) => {
+  const volumeMax = req.params.maxVolume;
+  const volumeMin = req.params.minVolume;
+    client.search({
+    index: 'caradisiac',
+    type: 'model',
+    body: {
+      "from" : 0, "size" : 50,
+    	"query": {
+    		"range": {
+        		"volume": {
+        			"lte": volumeMax,
+              "gte": volumeMin
+        		}
+        	}
+    	},
+        "sort": [
+              { "volume":   { "order": "desc" }}
+        	]
+    }
+  },function (error, response, status) {
+      if (error){
+        res.send({'error': error})
+      }
+      else {
+        res.send(response.hits.hits)
+      }
+  });
+});
 
 //Start the server
 app.listen(3000);
