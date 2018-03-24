@@ -87,9 +87,10 @@ app.get('/suv', (req, res) => {
     index: 'caradisiac',
     type: 'model',
     body: {
-      "sort": [
-        { "volume":   { "order": "desc" }},
-      ]
+       "from" : 0, "size" : 1000,
+       "sort" : [
+          {"volume" : {"order" : "desc"}}
+       ]
     }
   },function (error, response, status) {
       if (error){
@@ -112,7 +113,7 @@ app.get('/suv/minVolume/:minVolume', (req, res) => {
     	"query": {
     		"range": {
         		"volume": {
-        			"gte": volumeMax
+        			"gte": volumeMin
         		}
         	}
     	},
